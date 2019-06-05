@@ -34,7 +34,7 @@ class Form extends React.Component {
     const filteredFruitList = this.state.fruitList
       .filter(obj => {
         const fruit = obj["type"];
-        return fruit.indexOf(this.state.input) !== -1;
+        return fruit.indexOf(this.state.input.toLowerCase()) !== -1;
       })
       .map(obj => {
         return <Fruit key={obj.id} type={obj.type} emoji={obj.emoji} />;
