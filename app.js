@@ -18,13 +18,15 @@ class Form extends React.Component {
 
   //Loads fruits from url when component mounts
   async componentDidMount() {
-    const api = await fetch(
-      "https://my-json-server.typicode.com/thoughtworks-jumpstart/api/fruits"
-    )
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ fruitList: data });
-      });
+    try {
+      const api = await fetch(
+        "https://my-json-server.typicode.com/thoughtworks-jumpstart/api/fruits"
+      );
+      const data = await api.json();
+      this.setState({ fruitList: data });
+    } catch (e) {
+      console.log(e.message);
+    }
   }
 
   render() {
