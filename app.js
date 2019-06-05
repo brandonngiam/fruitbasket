@@ -1,37 +1,41 @@
 //Fruits function component
 function Fruit(props) {
-  return <li>{props.fruit}</li>;
+  return <li>{props.type + " " + props.emoji}</li>;
 }
 
 //Form class component
 class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.fruitList = [
-      { id: "1", type: "apple" },
-      { id: "2", type: "orange" },
-      { id: "3", type: "banana" },
-      { id: "4", type: "mango" },
-      { id: "5", type: "durian" },
-      { id: "6", type: "tomato" }
-    ];
-    this.state = { input: "" };
+    this.state = { input: "", fruitList: [] };
   }
 
+  //Event handler to capture user input
   userInput = () => {
     const userInput = document.querySelector("input").value;
-    console.log(this.fruitList);
     return this.setState({ input: userInput });
   };
 
+  //Loads fruits from url when component mounts
+  async componentDidMount() {
+    const api = await fetch(
+      "https://my-json-server.typicode.com/thoughtworks-jumpstart/api/fruits"
+    )
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ fruitList: data });
+      });
+  }
+
   render() {
-    const filteredFruitList = this.fruitList
+    //Filter fruit list according to userinput
+    const filteredFruitList = this.state.fruitList
       .filter(obj => {
         const fruit = obj["type"];
         return fruit.indexOf(this.state.input) !== -1;
       })
       .map(obj => {
-        return <Fruit key={obj.id} fruit={obj.type} />;
+        return <Fruit key={obj.id} type={obj.type} emoji={obj.emoji} />;
       });
 
     return (
